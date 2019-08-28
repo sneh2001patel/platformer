@@ -1,0 +1,24 @@
+# Screen Properties
+WIDTH = 900
+HEIGHT = 500
+FPS = 60
+TITLE = 'Platformer'
+
+
+
+# Colors
+BLACK = (0,0,0)
+GREEN = (0,255,0)
+RED = (255,0,0)
+BLUE = (0,0,255)
+YELLOW = (255,255,0)
+WHITE = (255,255,255)
+CYAN = (0,255,255)
+PURPLE = (255,0,255)
+
+# Player Properties
+PLAYER_ACC = 0.5
+PLAYER_FRIC = -0.14
+PLAYER_GRAV = 0.8
+PLAYER_JUMP = 20
+

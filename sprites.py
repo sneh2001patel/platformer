@@ -12,24 +12,40 @@ class Player(pg.sprite.Sprite):
         self.image = pg.Surface((30, 40))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH/2, HEIGHT/2)
+        self.rect.center = (100, HEIGHT/2)
         self.speed_x = 0
         self.jump_delay = 400
+        self.move_right = False
+        self.move_left = False
         self.last_jump = pg.time.get_ticks()
         self.jumping = False
-        self.pos = vec(WIDTH/2, HEIGHT/2)
-        self.vel = vec(0, 0)
+        self.pos = vec(100, HEIGHT/2)
+        self.vel = vec(0.6, -0.8)
         self.acc = vec(0, 0)
+        self.count = 0
 
     def update(self):
+        self.move_right = False
+        self.move_left = False
         KEYDOWN = pg.key.get_pressed()
         self.acc = vec(0, PLAYER_GRAV)
         if KEYDOWN[pg.K_LEFT] or KEYDOWN[pg.K_a]:
             self.acc.x = -PLAYER_ACC
+            self.move_left = True
         if KEYDOWN[pg.K_RIGHT] or KEYDOWN[pg.K_d]:
             self.acc.x = PLAYER_ACC
+            self.move_right = True
         if KEYDOWN[pg.K_SPACE] or KEYDOWN[pg.K_UP] or KEYDOWN[pg.K_w]:
             self.jump()
+
+        print(self.count)
+        if self.move_right:
+            self.count += 1
+        if self.move_left:
+            self.count -= 1
+
+
+
 
         # Friction
         self.acc.x += self.vel.x * PLAYER_FRIC
@@ -38,14 +54,13 @@ class Player(pg.sprite.Sprite):
             self.vel.x = 0
 
         self.pos += self.vel
+        # print(self.vel)
 
+        if self.pos.x >= WIDTH/2:
+            self.pos.x = WIDTH/2
 
-        if self.pos.x >= WIDTH:
-            self.pos.x = 0.5
-
-        if self.pos.x <= 0:
-            self.pos.x = WIDTH
-
+        if self.pos.x > 0 and self.pos.x < 100 and self.move_left:
+            self.pos.x = 100
         self.rect.midbottom = self.pos
 
     def jump(self):
@@ -65,10 +80,27 @@ class Platformer(pg.sprite.Sprite):
         self.image = pg.Surface((w, h))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
+        self.speed_x = 0
         self.rect.x = x
         self.rect.y = y
+        self.pos = vec(x, y)
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+
 
     def update(self):
-        pass
+        self.acc = vec(0,0)
+        self.speed_x = 0
+        if self.game.player.pos.x >= WIDTH/2 and self.game.player.move_right:
+            self.acc.x = -0.6
+        if self.game.player.pos.x >=0 and self.game.player.pos.x <= WIDTH/4 and self.game.player.move_left:
+            self.acc.x = 0.6
+
+        # Friction
+        self.acc.x += self.vel.x * PLAYER_FRIC
+        self.vel += self.acc
+        self.pos += self.vel
+
+        self.rect.x = self.pos.x
 
 

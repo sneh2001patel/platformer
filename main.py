@@ -13,7 +13,7 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
-
+        self.spwandelay = 50;
 
     def run(self):
         # loop game
@@ -31,7 +31,7 @@ class Game:
         self.platformer = pg.sprite.Group()
         self.plat0 = Platformer(self,WIDTH/2+45,HEIGHT/2+100,100,20)
         self.plat1 = Platformer(self,WIDTH/2-50,HEIGHT/2, 100,20)
-        self.plat2 = Platformer(self,0,HEIGHT-20,WIDTH,20)
+        self.plat2 = Platformer(self,0,HEIGHT-20,WIDTH*4,20)
         self.player = Player(self)
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.plat0)
@@ -61,6 +61,14 @@ class Game:
                 if colide:
                     self.player.pos.y = i.rect.top +1
                     self.player.vel.y = 0
+
+
+        if self.player.count == self.spwandelay:
+            self.player.count = 0
+            print("Match")
+            self.a  = Platformer(self,random.randrange(WIDTH,WIDTH+110), random.randrange(HEIGHT/2-50,HEIGHT/2+50),100,20)
+            self.all_sprites.add(self.a)
+            self.platformer.add(self.a)
 
 
 
